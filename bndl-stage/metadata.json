@@ -1,0 +1,32 @@
+{
+  "name": "bndl-stagine",
+  "version": "1.0.0",
+  "description": "Sets up BNDL Staging",
+  "long_description": "",
+  "maintainer": "Cid Dennis",
+  "maintainer_email": "cid.dennis@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+  },
+  "dependencies": {
+     "database": ">= 0.0.0",
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "bndl-staging": "Sets up BNDL Staging"
+  }
+}

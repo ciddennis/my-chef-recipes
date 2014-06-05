@@ -7,3 +7,9 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.3.6'
 
 depends 'yum', '~> 3.0'
+
+supports 'redhat'
+supports 'centos'
+supports 'scientific'
+supports 'amazon'
+supports 'fedora'
