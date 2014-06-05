@@ -24,8 +24,6 @@
     "build-essential": ">= 0.0.0",
     "windows": ">= 0.0.0",
     "runit": ">= 1.0.0",
-    "yum": "~> 3.0",
-    "yum-epel": ">= 0.0.0"
   },
   "recommendations": {
   },

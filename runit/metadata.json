@@ -19,8 +19,6 @@
   },
   "dependencies": {
     "build-essential": ">= 0.0.0",
-    "yum": "~> 3.0",
-    "yum-epel": ">= 0.0.0"
   },
   "recommendations": {
   },
