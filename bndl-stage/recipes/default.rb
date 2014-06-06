@@ -46,28 +46,28 @@
 # end
 
 
-group "sidekiq" do
-  action :create
-  system true
-end
+# group "sidekiq" do
+#   action :create
+#   system true
+# end
 
-user "sidekiq" do
-  comment "sidekiq User"
-  home    "/home/sidekiq"
-  shell   "/bin/bash"
-  gid     "sidekiq"
-  supports :manage_home => false
-  action  :create
-  system true
-end
+# user "sidekiq" do
+#   comment "sidekiq User"
+#   home    "/home/sidekiq"
+#   shell   "/bin/bash"
+#   gid     "sidekiq"
+#   supports :manage_home => false
+#   action  :create
+#   system true
+# end
 
-# FIX: Work around the fact that Chef creates the directory even for `manage_home: false`
-bash "remove the sidekiq user home" do
-  user    'root'
-  code    "rm -rf /home/sidekiq"
-  not_if  { ::File.symlink?("/home/sidekiq") } 
-  only_if { ::File.directory?("/home/sidekiq") }
-end
+# # FIX: Work around the fact that Chef creates the directory even for `manage_home: false`
+# bash "remove the sidekiq user home" do
+#   user    'root'
+#   code    "rm -rf /home/sidekiq"
+#   not_if  { ::File.symlink?("/home/sidekiq") } 
+#   only_if { ::File.directory?("/home/sidekiq") }
+# end
 
 
 
