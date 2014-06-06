@@ -74,10 +74,16 @@ end
 
 # Create service
 #
-template "/etc/init.d/postgres" do
+template "/etc/init/postgres.conf" do
   source "postgres-init.conf.erb"
   owner 'root' and mode 0755
 end
+
+template "/etc/init/redis.conf" do
+  source "redis-init.conf.erb"
+  owner 'root' and mode 0755
+end
+
 
 # service "elasticsearch" do
 #   supports :status => true, :restart => true
