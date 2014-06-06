@@ -1,6 +1,6 @@
 postgresql_database 'bndl_development' do
   connection(
-    :host      => '127.0.0.1'
+    :host      => '127.0.0.1',
     :port      => 5432,
     :username  => 'postgres',
     :password  => node['postgresql']['password']['postgres']
