@@ -1,0 +1,7 @@
+development:
+  adapter: postgresql
+  database: <%= node.deploy[:bndl][:database][:database] %>
+  host: localhost
+  username: <%= node.deploy[:bndl][:database][:username] %>
+  pool: 5
+  timeout: 5000

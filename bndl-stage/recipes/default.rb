@@ -1,3 +1,20 @@
+postgresql_database 'bndl_development' do
+  connection(
+    :host      => '127.0.0.1'
+    :port      => 5432,
+    :username  => 'postgres',
+    :password  => node['postgresql']['password']['postgres']
+  )
+  action :create
+end
+
+
+template "/srv/www/bndl/shared/config/database.yml" do
+  source "database.yaml.erb"
+  owner 'deploy' and mode 0666
+end
+
+
 # group "postgres" do
 #   action :create
 #   system true
