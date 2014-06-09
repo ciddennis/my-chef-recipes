@@ -2,10 +2,7 @@ include_recipe 'postgresql::ruby'
 
 postgresql_database 'bndl_development' do
   connection(
-    :host      => '127.0.0.1',
-    :port      => 5432,
-    :username  => 'postgres',
-    :password  => '<%= node.deploy[:bndl][:database][:password] %>'
+    :host      => 'localhost'
   )
   action :create
 end
