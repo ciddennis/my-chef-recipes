@@ -7,10 +7,11 @@
   "maintainer_email": "cid.dennis@gmail.com",
   "license": "Apache 2.0",
   "platforms": {
-    "ubuntu": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
   },
   "dependencies": {
      "database": ">= 0.0.0",
+     "postgresql": ">= 0.0.0"
   },
   "recommendations": {
   },
