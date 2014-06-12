@@ -14,6 +14,16 @@ execute 'add logstash' do
   action :run
 end
 
+execute 'add source list' do
+  command 'echo "deb http://packages.elasticsearch.org/logstash/1.4/debian stable main" >> /etc/apt/source_list'
+  action :run
+end
+
+execute 'add source list' do
+  command 'echo "deb http://packages.elasticsearch.org/elasticsearch/1.1/debian stable main" >> /etc/apt/source_list'
+  action :run
+end
+
 execute 'update apt' do
   command 'apt-get update'
   action :run
