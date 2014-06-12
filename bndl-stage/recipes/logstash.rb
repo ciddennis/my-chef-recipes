@@ -24,6 +24,7 @@ ark "logstash" do
   owner node[:logstash][:agent][:user]
   group node[:logstash][:agent][:group]
   version node[:logstash][:agent][:version]
+  notifies :start,   'service[logstash]'
   # checksum node[:logstash][:agent][:checksum]
 end
 
