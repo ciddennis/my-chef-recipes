@@ -7,6 +7,7 @@ default.logstash[:agent][:source_url] = "https://download.elasticsearch.org/logs
 default.logstash[:agent][:checksum] = "834599d28ce50012c221ece7a6783c5943221e36"
 default.logstash[:agent][:version] = "1.4.1"
 
+default.logstash[:agent][:filter] = []
 default.logstash[:agent][:inputs] = [
           {
               "redis" => {
