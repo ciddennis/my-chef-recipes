@@ -1,103 +1,106 @@
-#!/usr/bin/env bash
+#! /bin/sh
 #
-# logstash
+# Logstash Start/Stop logstash
 #
-# chkconfig:   - 57 47
-# description: logstash
+# chkconfig: 345 99 99
+# description: Logstash
 # processname: logstash
-# config:      <%= node[:elasticsearch][:path][:conf] %>/elasticsearch.yml
 
-PIDFILE='/usr/local/logstash.pid'
-LOGSTASH_USER =  <%= node[:logstash][:agent][:user] %>
-CHECK_PID_RUNNING=$(ps ax | grep 'java' | grep -e "logstash.conf" | sed 's/^\s*\([0-9]*\)\s.*/\1/')
+logstash_bin="/usr/local/logstash/bin/logstash"
+logstash_log="/var/log/logstash-agent.log"
+logstash_conf="/usr/local/logstash/logstash.conf"
+PID_FILE="/usr/local/logstash/logstash-agent.pid"
 
-start() {
-    if [ -f $PIDFILE ]; then
-      # PIDFILE EXISTS -- ES RUNNING?
-      echo -e "\033[31;1mPID file found in $PIDFILE, logstash already running?\033[0m"
-      es_pid="$(cat $PIDFILE)"
-      pid_running="$( ps ax | grep 'java' | grep logstash.conf )"
-
-      if [ ! -z "$pid_running" ] ; then
-        # EXIT IF ES IS ALREADY RUNNING
-	      echo -e "\033[31;1mPID $es_pid still alive, already running...\033[0m"
-	      return 1
-      fi
-    fi
-
-    echo -e "\033[1mStarting logstash...\033[0m"
-    touch $PIDFILE && chown <%= node[:logstash][:agent][:user] %> $PIDFILE
-    su $LOGSTASH_USER -c "/usr/local/logstash/bin/logstash -f /usr/local/logstash/logstash.conf > '1' ? ' -d' : '' %> -p $PIDFILE"
-
-    return $?
-}
-
-stop() {
-    if [[ -f $PIDFILE ]]; then
-      echo -n -e "\033[1mStopping logstash...\033[0m"
-
-      # REMOVE PIDFILE AND EXIT IF PROCESS NOT RUNNING
-      if [ ! $CHECK_PID_RUNNING ]; then
-        echo -e "\033[1mPID file found, but no matching process running?\033[0m"
-        echo    "Removing PID file..."
-        su $LOGSTASH_USER -m -c "rm $PIDFILE"
-        exit 0
-      fi
-
-      # KILL PROCESS
-      pid=$(cat $PIDFILE)
-      su $LOGSTASH_USER -m -c "kill $(cat $PIDFILE)"
-      r=$?
-
-      # Check for process
-      timeout=0
-      while [ $(ps -p $pid | wc -l ) -gt '1' ]; do
-        echo -n '.'
-        (( timeout ++))
-        if [ $timeout -gt '30' ]; then return; fi
-        sleep 1
-      done;
-
-      # Check for pidfile
-      timeout=0
-      while [ -f $PIDFILE  ]; do
-        echo -n '.'
-        (( timeout++ ))
-        if [ $timeout -gt '15' ]; then return; fi
-        sleep 1
-      done; echo
-      return $r
+find_logstash_process () {
+    if [ -f $PID_FILE ]; then
+        PID=`cat $PID_FILE`
     else
-      echo -e "\033[1mNo PID file found -- elasticsearch not running?\033[0m"
+        PIDTEMP=`ps -aef |grep logstash|grep java |grep logstash.conf | awk '{ print $2 }'`
+        # Pid not found
+        if [ "x$PIDTEMP" = "x" ]; then
+            PID=-1
+        else
+            PID=$PIDTEMP
+            echo "Warning: no PID file found, replacing"
+            # Recompose PID file, not sure if there's a better way of handling this
+            echo $PID > $PID_FILE
+        fi
     fi
 }
 
-restart() {
-    stop
-    timeout=30
-    while ps aux | grep 'java' | grep -e "logstash.conf"; do
-      echo -n '.'
-      (( timeout-- ))
-      if [ $timeout -lt '1' ]; then return; fi
-      sleep 1
-    done;
-    start
+start () {
+    touch $logstash_log
+    chown logstash:logstash $logstash_log
+    LOG_DIR=`dirname ${logstash_log}`
+    if [ ! -d $LOG_DIR ]; then
+      echo "Log dir ${LOG_DIR} doesn't exist. Creating"
+      mkdir $LOG_DIR
+    fi
+    su logstash -c "nohup ${logstash_bin} -f ${logstash_conf} >  ${logstash_log} &"
+    sleep 1
+    PID=`ps -aef |grep logstash|grep java |grep logstash.conf | awk '{ print $2 }'`
+    if [ "x$PID" = "x" ]; then
+        PID=-1
+    fi
+
+    if [ $PID -eq -1 ]; then
+        echo "Logstash failed to start."
+        exit 1
+    else
+        echo $PID > $PID_FILE
+        echo "Started successfully, PID $PID"
+        exit 0
+    fi
 }
 
+stop () {
+    find_logstash_process
+    if [ "$PID" -ne "-1" ]; then
+        kill $PID
+        if [ "$?" -eq "0" ]; then
+            echo "Logstash agent stopped successfully."
+            rm -f $PID_FILE
+        else
+            echo "Logstash was not stopped."
+        fi
+    else
+        echo "Couldn't find Logstash PID, is it running?"
+    fi
+}
 
-case "$1" in
-  start)
+case $1 in
+start)
         start
         ;;
-  stop)
+stop)
         stop
+        exit 0
         ;;
-  restart)
-        restart
+reload)
+        stop
+        start
         ;;
-  *)
-        echo $"Usage: $0 {start|stop|restart|}"
-        exit 1
+restart)
+        stop
+        start
+        ;;
+status)
+        find_logstash_process
+        if [ $PID -gt 0 ]; then
+            if [ -d /proc/$PID ]; then
+                echo "Running, PID $PID"
+                exit 0
+            else
+                echo "Found PID file, but process does not exist.  Removing stale PID."
+                rm -f $PID_FILE
+            fi
+        else
+            echo "Not running."
+            exit 1
+        fi
+        ;;
+*)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        RETVAL=1
 esac
-
-exit $?
+exit 0
