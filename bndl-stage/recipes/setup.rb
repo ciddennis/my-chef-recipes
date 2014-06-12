@@ -1,49 +1,48 @@
 execute 'install wget' do
   command 'apt-get install wget'
-  action :nothing
+  action :run
 end
-
 
 
 execute 'add elastic' do
   command 'wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -'
-  action :nothing
+  action :run
 end
 
 execute 'add logstash' do
   command 'wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -'
-  action :nothing
+  action :run
 end
 
 execute 'update apt' do
   command 'apt-get update'
-  action :nothing
+  action :run
 end
 
 
 execute 'install openjdk-7-jre-lib' do
   command 'apt-get install openjdk-7-jre-lib'
-  action :nothing
+  action :run
 end
 
 execute 'install ntp' do
   command 'apt-get install ntp'
-  action :nothing
+  action :run
 end
 
 execute 'install redis-server' do
   command 'apt-get install redis-server'
-  action :nothing
+  action :run
 end
 
 execute 'install elastic' do
   command 'apt-get install elasticsearch'
-  action :nothing
+  action :run
 end
 
 execute 'install logstash' do
   command 'apt-get install logstash'
-  action :nothing
+  action :run
 end
 
 
