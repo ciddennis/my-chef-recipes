@@ -20,6 +20,8 @@
   "conflicting": {
   },
   "providing": {
+      "bndl-staging": ">= 0.0.0",
+      "bndl-staging::logstash": ">= 0.0.0"
   },
   "replacing": {
   },
