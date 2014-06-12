@@ -1,4 +1,4 @@
-node[:logstash] = {:agent => {}}
+node.default[:logstash] ||= {:agent => {}}
 
 
 node[:logstash][:agent][:user] = "logstash"
