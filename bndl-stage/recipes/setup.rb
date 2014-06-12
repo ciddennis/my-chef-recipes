@@ -29,7 +29,6 @@ execute 'update apt' do
   action :run
 end
 
-
 execute 'install openjdk-7-jre-lib' do
   command 'apt-get -y install openjdk-7-jre-lib'
   action :run
@@ -50,10 +49,30 @@ execute 'install elastic' do
   action :run
 end
 
+
+execute 'elastic search runlevel' do
+  command 'update-rc.d elasticsearch defaults'
+  action :run
+end
+
+execute 'elasticsearch start' do
+  command 'service elasticsearch start'
+  action :run
+end
+
+
 execute 'install logstash' do
   command 'apt-get -y install logstash'
   action :run
 end
+
+execute 'logstash start' do
+  command 'service logstash start'
+  action :run
+end
+
+
+# /etc/logstash/conf.d
 
 
 #
