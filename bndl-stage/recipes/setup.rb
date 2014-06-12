@@ -30,7 +30,7 @@ execute 'update apt' do
 end
 
 execute 'install openjdk-7-jre-lib' do
-  command 'apt-get -y install openjdk-7-jre-lib'
+  command 'apt-get -y install openjdk-7-jdk'
   action :run
 end
 
