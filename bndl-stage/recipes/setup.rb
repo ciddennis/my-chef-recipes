@@ -31,27 +31,27 @@ end
 
 
 execute 'install openjdk-7-jre-lib' do
-  command 'apt-get install openjdk-7-jre-lib'
+  command 'apt-get -y install openjdk-7-jre-lib'
   action :run
 end
 
 execute 'install ntp' do
-  command 'apt-get install ntp'
+  command 'apt-get -y install ntp'
   action :run
 end
 
 execute 'install redis-server' do
-  command 'apt-get install redis-server'
+  command 'apt-get -y install redis-server'
   action :run
 end
 
 execute 'install elastic' do
-  command 'apt-get install elasticsearch'
+  command 'apt-get -y install elasticsearch'
   action :run
 end
 
 execute 'install logstash' do
-  command 'apt-get install logstash'
+  command 'apt-get -y install logstash'
   action :run
 end
 
