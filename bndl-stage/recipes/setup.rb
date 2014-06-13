@@ -1,8 +1,6 @@
-execute 'install wget' do
-  command 'apt-get install wget'
-  action :run
+apt_package "wget" do
+  action :install
 end
-
 
 execute 'add elastic' do
   command 'wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -'
@@ -29,25 +27,59 @@ execute 'update apt' do
   action :run
 end
 
-execute 'install openjdk-7-jre-lib' do
-  command 'apt-get -y install openjdk-7-jdk'
+apt_package "openjdk-7-jdk" do
+  action :install
+end
+
+apt_package "ntp" do
+  action :install
+end
+
+apt_package "imagemagick" do
+  action :install
+end
+
+apt_package "libxml2-dev" do
+  action :install
+end
+
+apt_package "libxslt-dev" do
+  action :install
+end
+
+apt_package "redis-server" do
+  action :install
+end
+
+apt_package "postgresql-9.1" do
+  action :install
+end
+
+apt_package "postgresql-contrib-9.1" do
+  action :install
+end
+
+apt_package "postgresql-server-dev-9.1" do
+  action :install
+end
+
+apt_package "postgresql-client-9.1" do
+  action :install
+end
+
+apt_package "elasticsearch" do
+  action :install
+end
+
+
+execute 'create database' do
+  command 'pql < "create database bndl_development"'
+  user "postgres"
+  group "postgres"
   action :run
 end
 
-execute 'install ntp' do
-  command 'apt-get -y install ntp'
-  action :run
-end
 
-execute 'install redis-server' do
-  command 'apt-get -y install redis-server'
-  action :run
-end
-
-execute 'install elastic' do
-  command 'apt-get -y install elasticsearch'
-  action :run
-end
 
 
 execute 'elastic search runlevel' do
@@ -55,10 +87,11 @@ execute 'elastic search runlevel' do
   action :run
 end
 
-execute 'elasticsearch start' do
-  command 'service elasticsearch start'
-  action :run
+service "elasticsearch" do
+  action :start
 end
+
+
 
 
 execute 'install logstash' do
@@ -66,25 +99,12 @@ execute 'install logstash' do
   action :run
 end
 
-execute 'logstash start' do
-  command 'service logstash start'
-  action :run
+template "/etc/logstash/conf.d/bndl.conf" do
+  source "logstash.config.erb"
+  owner 'root' and mode 0666
 end
 
+service "logstash" do
+  action :start
+end
 
-# /etc/logstash/conf.d
-
-
-#
-# wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -
-# deb http://packages.elasticsearch.org/logstash/1.4/debian stable main
-# apt-get update
-#
-# wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -
-# deb http://packages.elasticsearch.org/elasticsearch/1.1/debian stable main
-# apt-get update
-#
-# apt-get install elasticsearch
-# apt-get install logstash
-# apt-get install redis-server
-#
