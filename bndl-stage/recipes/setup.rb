@@ -69,7 +69,7 @@ end
 
 
 template "/etc/postgresql/9.1/main/pg_hba.conf" do
-  source "logstash.config.erb"
+  source "pg_hba.conf.erb"
   owner 'postgres' and mode 0444
   group 'postgres'
 end
