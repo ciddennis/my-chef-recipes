@@ -85,7 +85,7 @@ end
 
 
 
-cmd = "echo \"ALTER USER Postgres WITH PASSWORD '#{node[:deploy][:bndl][:database][:password]}'\" | psql'"
+cmd = "echo \"ALTER USER Postgres WITH PASSWORD '#{node[:deploy][:bndl][:database][:password]}'\" | psql"
 
 execute 'create database' do
   command cmd
