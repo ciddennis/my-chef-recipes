@@ -10,4 +10,3 @@ recipe            'bndl-stage', 'Configures simple staging server'
   supports os
 end
 
-depends 'database'
