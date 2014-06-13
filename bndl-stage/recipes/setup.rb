@@ -84,6 +84,16 @@ apt_package "elasticsearch" do
 end
 
 
+
+cmd = "echo \"ALTER USER Postgres WITH PASSWORD '#{node[:deploy][:bndl][:database][:password]}'\" | psql'"
+
+execute 'create database' do
+  command cmd
+  user "postgres"
+  group "postgres"
+  action :run
+end
+
 execute 'create database' do
   command 'echo "create database bndl_development" | psql'
   user "postgres"

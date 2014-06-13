@@ -7,4 +7,5 @@ end
 
 
 
+# See the setup loads on AWS instance
 # tail -f `ps -aef|grep tee  |grep -v grep|cut -c54-190`
