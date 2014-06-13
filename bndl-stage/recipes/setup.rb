@@ -67,19 +67,29 @@ apt_package "postgresql-client-9.1" do
   action :install
 end
 
+
+template "/etc/postgresql/9.1/main/pg_hba.conf" do
+  source "logstash.config.erb"
+  owner 'postgres' and mode 0444
+  group 'postgres'
+end
+
+service "postgresql" do
+  action :restart
+end
+
+
 apt_package "elasticsearch" do
   action :install
 end
 
 
 execute 'create database' do
-  command 'pql < "create database bndl_development"'
+  command 'echo "create database bndl_development" | pql'
   user "postgres"
   group "postgres"
   action :run
 end
-
-
 
 
 execute 'elastic search runlevel' do
