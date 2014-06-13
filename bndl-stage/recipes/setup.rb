@@ -85,7 +85,7 @@ end
 
 
 execute 'create database' do
-  command 'echo "create database bndl_development" | pql'
+  command 'echo "create database bndl_development" | psql'
   user "postgres"
   group "postgres"
   action :run
