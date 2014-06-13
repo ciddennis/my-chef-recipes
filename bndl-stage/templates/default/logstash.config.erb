@@ -1,0 +1,12 @@
+input {
+    redis {
+        codec => "json"
+        data_type => "list"
+        key => "events"
+    }
+}
+output {
+    elasticsearch {
+        host => localhost
+    }
+}

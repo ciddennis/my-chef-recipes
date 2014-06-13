@@ -111,7 +111,8 @@ end
 
 template "/etc/logstash/conf.d/bndl.conf" do
   source "logstash.config.erb"
-  owner 'root' and mode 0666
+  owner 'logstash' and mode 0444
+  group 'logstash'
 end
 
 service "logstash" do
