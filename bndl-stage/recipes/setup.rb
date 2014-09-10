@@ -7,6 +7,11 @@ execute 'add elastic' do
   action :run
 end
 
+execute 'add new relic' do
+  command 'wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add -'
+  action :run
+end
+
 execute 'add logstash' do
   command 'wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -'
   action :run
@@ -22,6 +27,11 @@ execute 'add source list' do
   action :run
 end
 
+execute 'add source list' do
+  command 'echo deb http://apt.newrelic.com/debian/ newrelic non-free >> /etc/apt/sources.list.d/newrelic.list'
+  action :run
+end
+
 execute 'update apt' do
   command 'apt-get update'
   action :run
@@ -29,6 +39,19 @@ end
 
 apt_package "openjdk-7-jdk" do
   action :install
+end
+
+apt_package "newrelic-sysmond" do
+  action :install
+end
+
+execute "add newrelic key"  do
+  command "nrsysmond-config --set license_key=#{node[:newrelic][:key]}"
+  action :run
+end
+
+service "newrelic-sysmond" do
+  action :start
 end
 
 apt_package "ntp" do
@@ -59,25 +82,25 @@ apt_package "postgresql-contrib-9.1" do
   action :install
 end
 
-apt_package "postgresql-server-dev-9.1" do
-  action :install
-end
-
+# apt_package "postgresql-server-dev-9.1" do
+#   action :install
+# end
+#
 apt_package "postgresql-client-9.1" do
   action :install
 end
 
 
-template "/etc/postgresql/9.1/main/pg_hba.conf" do
-  source "pg_hba.conf.erb"
-  owner 'postgres' and mode 0444
-  group 'postgres'
-end
+# template "/etc/postgresql/9.1/main/pg_hba.conf" do
+#   source "pg_hba.conf.erb"
+#   owner 'postgres' and mode 0444
+#   group 'postgres'
+# end
 
-service "postgresql" do
-  action :restart
-end
-
+# service "postgresql" do
+#   action :restart
+# end
+#
 
 apt_package "elasticsearch" do
   action :install
