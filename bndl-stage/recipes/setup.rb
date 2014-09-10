@@ -78,9 +78,9 @@ end
 #   action :install
 # end
 
-apt_package "postgresql-contrib-9.1" do
-  action :install
-end
+# apt_package "postgresql-contrib-9.1" do
+#   action :install
+# end
 
 # apt_package "postgresql-server-dev-9.1" do
 #   action :install
