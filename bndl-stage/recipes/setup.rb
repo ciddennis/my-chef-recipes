@@ -82,11 +82,11 @@ end
 #   action :install
 # end
 
-# apt_package "postgresql-server-dev-9.1" do
-#   action :install
-# end
-#
-apt_package "postgresql-client-9.1" do
+apt_package "postgresql-server-dev-all" do
+  action :install
+end
+
+apt_package "postgresql-client" do
   action :install
 end
 
