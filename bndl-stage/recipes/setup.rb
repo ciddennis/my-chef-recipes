@@ -74,9 +74,9 @@ apt_package "redis-server" do
   action :install
 end
 
-apt_package "postgresql-9.1" do
-  action :install
-end
+# apt_package "postgresql-9.1" do
+#   action :install
+# end
 
 apt_package "postgresql-contrib-9.1" do
   action :install
@@ -108,23 +108,23 @@ end
 
 
 
-cmd = "echo \"ALTER USER Postgres WITH PASSWORD '#{node[:deploy][:bndl][:database][:password]}'\" | psql"
-
-execute 'create database' do
-  command cmd
-  user "postgres"
-  group "postgres"
-  action :run
-end
-
-execute 'create database' do
-  command 'echo "create database bndl_development" | psql'
-  user "postgres"
-  group "postgres"
-  action :run
-end
-
-
+# cmd = "echo \"ALTER USER Postgres WITH PASSWORD '#{node[:deploy][:bndl][:database][:password]}'\" | psql"
+#
+# execute 'create database' do
+#   command cmd
+#   user "postgres"
+#   group "postgres"
+#   action :run
+# end
+#
+# execute 'create database' do
+#   command 'echo "create database bndl_development" | psql'
+#   user "postgres"
+#   group "postgres"
+#   action :run
+# end
+#
+#
 execute 'elastic search runlevel' do
   command 'update-rc.d elasticsearch defaults'
   action :run
